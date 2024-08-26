@@ -1,0 +1,46 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="stylesheet" href="/styles/css/artis.css">
+    <script src="https://cesium.com/downloads/cesiumjs/releases/1.101/Build/Cesium/Cesium.js"></script>
+    <link href="https://cesium.com/downloads/cesiumjs/releases/1.101/Build/Cesium/Widgets/widgets.css" rel="stylesheet">
+    <title>Document</title>
+    <style>
+    </style>
+</head>
+<body>
+
+    <section class="about-text animation">
+        <form method="get" action="/maps">
+            <div class="maps">
+                <label for="cities">Select a city: </label>
+                <select id="cities" name="city">
+                    {{range .Cities}}
+                    <option value="{{.}}" {{if eq . $.SelectedCity}}selected{{end}}>{{.}}</option>
+                    {{end}}
+                </select>
+                <input type="submit" value="Go" class="btn">
+            </div>
+        </form>
+        <div id="cesiumContainer"></div>
+    </section>
+    <script src="https://cesium.com/downloads/cesiumjs/releases/1.82/Build/Cesium/Cesium.js"></script>
+    <script>
+        Cesium.Ion.defaultAccessToken = "{{.Token}}"; // Initialize the Cesium viewer
+        const viewer = new Cesium.Viewer('cesiumContainer');
+        // Check if there are coordinates to display
+        const lat = parseFloat("{{.Lat}}");
+        const lon = parseFloat("{{.Lon}}");
+        console.log(lat, lon)
+        if (lat && lon) {
+            viewer.camera.flyTo({
+                destination: Cesium.Cartesian3.fromDegrees(lon, lat, 1500)
+            });
+        }
+    </script>
+</body>
+
+</html>

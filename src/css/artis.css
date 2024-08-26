@@ -77,6 +77,10 @@ main {
 a {
   text-decoration: none;
 }
+.about-text.animation {
+  width: 100%;
+  height: 100%;
+}
 
 img,
 ion-icon,
@@ -458,7 +462,40 @@ main {
   transition: transform .3s ease-in-out;
 } 
 
+/* 
+maps
 
+*/
+
+.cesium-viewer-animationContainer, .cesium-viewer-bottom, .cesium-timeline-bar, .cesium-viewer-timelineContainer, .cesium-navigationHelpButton-wrapper, .cesium-viewer-geocoderContainer { display: none; } 
+#cesiumContainer {
+  width: 100%;
+  height: 500px; /* Or any height you need */
+  display: block;
+}
+.about-text {
+  display: block;
+  visibility: visible;
+  height: auto; /* Ensure the height is set */
+}
+
+iframe {
+  margin-top: 22px;
+  width: 100%;
+  border-radius: 20px;
+  height: 56vh;
+}
+  .maps {
+    display: flex;
+}
+
+input.btn {
+  background: aliceblue;
+  width: 57px;
+  border-radius: 10px;
+  margin-left: 19px;
+}
+/* end maps */
 /* end Go Back */
 @media (max-width: 700px) {
   body {

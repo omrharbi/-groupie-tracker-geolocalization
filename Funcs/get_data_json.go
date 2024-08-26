@@ -2,6 +2,7 @@ package Groupie_tracker
 
 import (
 	"bytes"
+	"fmt"
 	"net/http"
 	"os"
 	"path/filepath"
@@ -57,27 +58,47 @@ func HandlerShowRelation(w http.ResponseWriter, r *http.Request) {
 		return
 	}
 	idParam := r.PathValue("id")
-	artist, err := FetchDataRelationFromId(idParam)
+	cities := r.Form.Get("city")
+	fmt.Println(cities)
+	artist, err := FetchDataRelationFromId(idParam, cities)
 	if err != nil {
 		HandleErrors(w, errors.InternalError, errors.DescriptionInternalError, http.StatusInternalServerError)
 		return
 	}
 
-	if artist.ID == 0 {
+	if artist.Id == 0 {
 		HandleErrors(w, errors.NotFound, errors.DescriptionNotFound, http.StatusNotFound)
 		return
 	}
+
 	var buf bytes.Buffer
 	errs := tmpl.ExecuteTemplate(&buf, "InforArtis.html", artist)
 	if errs != nil {
+		fmt.Println(errs)
 		HandleErrors(w, errors.InternalError, errors.DescriptionInternalError, http.StatusInternalServerError)
 		return
 	}
-	_, erro := buf.WriteTo(w)
-	if erro != nil {
+	_, errs = buf.WriteTo(w)
+	if errs != nil {
+		fmt.Println(errs)
 		HandleErrors(w, errors.InternalError, errors.DescriptionInternalError, http.StatusInternalServerError)
 		return
 	}
+}
+
+func Handler(w http.ResponseWriter, r *http.Request) {
+	city := r.URL.Query().Get("city")
+	fmt.Println(city)
+	var lat, lon float64
+	var err error
+	if city != "" {
+		lat, lon, err = GetCoordinates(city)
+		if err != nil {
+			lat, lon = 0, 0
+		}
+	}
+	data := SendData(lat, lon, city)
+	tmpl.ExecuteTemplate(w, "maps.html", data)
 }
 
 func HandleStyle(w http.ResponseWriter, r *http.Request) {

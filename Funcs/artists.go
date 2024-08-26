@@ -36,8 +36,11 @@ func GetArtistsDataStruct() ([]JsonData, error) {
 	return newartist, nil
 }
 
+var location Location
+
 // / func to fetching data from any struct and return Struct Artist with Id user
-func FetchDataRelationFromId(id string) (Artist, error) {
+func FetchDataRelationFromId(id, cityes string) (Artist, error) {
+	fmt.Println(cityes)
 	url := "https://groupietrackers.herokuapp.com/api"
 	urlartist := url + "/artists/" + id
 	var artist Artist
@@ -46,29 +49,29 @@ func FetchDataRelationFromId(id string) (Artist, error) {
 		return Artist{}, fmt.Errorf("error fetching data from artist data: %w", err)
 	}
 
-	if artist.ID == 0 {
+	if artist.Id == 0 {
 		return artist, nil
 	}
 
 	var date Date
 	urldate := url + "/dates/" + id
-	errdate := GetanyStruct(urldate, &date)
+	err = GetanyStruct(urldate, &date)
 	if err != nil {
-		return Artist{}, fmt.Errorf("error fetching data from artist data: %w", errdate)
+		return Artist{}, fmt.Errorf("error fetching data from artist data: %w", err)
 	}
 
-	var location Location
 	urlLocation := url + "/locations/" + id
-	errlocations := GetanyStruct(urlLocation, &location)
+	err = GetanyStruct(urlLocation, &location)
 	if err != nil {
-		return Artist{}, fmt.Errorf("error fetching data from locations data: %w", errlocations)
+		return Artist{}, fmt.Errorf("error fetching data from locations data: %w", err)
 	}
 	var relation Relation
 	urlrelation := url + "/relation/" + id
-	errrelation := GetanyStruct(urlrelation, &relation)
+	err = GetanyStruct(urlrelation, &relation)
 	if err != nil {
-		return Artist{}, fmt.Errorf("error fetching data from locations data: %w", errrelation)
+		return Artist{}, fmt.Errorf("error fetching data from locations data: %w", err)
 	}
+
 	artist.Location = location.Location
 	artist.Date = date.Date
 	artist.DatesLocations = formatLocations(relation.DatesLocations)
@@ -77,7 +80,7 @@ func FetchDataRelationFromId(id string) (Artist, error) {
 
 // func to UnmarshalJSON from any struct with send url and any
 // return error for has any error
-func GetanyStruct(url string, result  interface{}) error {
+func GetanyStruct(url string, result interface{}) error {
 	response, err := http.Get(url)
 	if err != nil {
 		return fmt.Errorf("error fetching data from URL: %w", err)
@@ -88,6 +91,27 @@ func GetanyStruct(url string, result  interface{}) error {
 		return fmt.Errorf("error decoding JSON data: %w", err)
 	}
 	return nil
+}
+
+func getCities() []string {
+	cities := []string{}
+	for _, item := range location.Location {
+		city := strings.NewReplacer("-", " ", "_", " ").Replace(item)
+		cities = append(cities, city)
+
+	}
+	return cities
+}
+
+func SendData(lat, lon float64, city string) map[string]interface{} {
+	cities := getCities()
+	return map[string]interface{}{
+		"Token":        "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJqdGkiOiJkODRkOWJmMy1lZWIwLTRjNTktOTFlNC1mMzMxYWJjYTAxYzAiLCJpZCI6MjM2NzE4LCJpYXQiOjE3MjQ0OTU5Mjd9.xUdL_xpp9kiw0sS_VQ5IOFdlFfN6ORhU4PPsyGVP_kc",
+		"Cities":       cities,
+		"Lat":          lat,
+		"Lon":          lon,
+		"SelectedCity": city,
+	}
 }
 
 // func To Format String To remove '_' or '-' and Capitaliz text

@@ -12,7 +12,7 @@ type JsonData struct {
 	Relations    string   `json:"relations"`
 }
 type Artist struct {
-	ID             int                 `json:"id"`
+	Id             int                 `json:"id"`
 	Image          string              `json:"image"`
 	Name           string              `json:"name"`
 	Members        []string            `json:"members"`
@@ -20,10 +20,20 @@ type Artist struct {
 	CreationDate   int                 `json:"creationDate"`
 	FirstAlbum     string              `json:"firstAlbum"`
 	Date           []string            `json:"dates"`
-	Location       interface{}         `json:"locations"`
+	Location       []string
 }
+
+type GeoResponse struct {
+	Items []struct {
+		Position struct {
+			Lat float64 `json:"lat"`
+			Lng float64 `json:"lng"`
+		} `json:"position"`
+	} `json:"items"`
+}
+
 type Location struct {
-	Location interface{} `json:"locations"`
+	Location []string `json:"locations"`
 }
 type Date struct {
 	Date []string `json:"dates"`

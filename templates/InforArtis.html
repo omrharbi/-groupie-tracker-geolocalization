@@ -6,6 +6,7 @@
     <link rel="stylesheet" href="/styles/css/artis.css">
     <title>Artist Info | {{ .Name }}</title>
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
 </head>
 
 <body>
@@ -113,11 +114,14 @@
                     <span class="prog"></span>
                 </header>
                 <h2 class="titles">Locations</h2>
-                <section class="about-text animation">
-                    {{range .Location }}
-                    <p>{{ . }}</p>
-                    {{end}}
-                </section>
+                <div class="maps">
+                    <iframe
+                    src="/templates/maps.html"
+                    name="targetframe"
+                    allowTransparency="true"
+                    scrolling="no"
+                    frameborder="0"></iframe>
+                </div>
             </article>
             <article id="relation" class="contact-artists">
                 <header>
@@ -140,13 +144,19 @@
                                 </li>
                             </div>
                             {{end}}
+
                         </ul>
                     </div>
                 </header>
             </article>
         </div>
     </main>
+    
+
+   
     <script src="/styles/js/navigation.js"></script>
+    
+
 </body>
 
 </html>
