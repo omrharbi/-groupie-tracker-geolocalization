@@ -57,8 +57,12 @@ func HandlerShowRelation(w http.ResponseWriter, r *http.Request) {
 		HandleErrors(w, errors.MethodNotAllowed, errors.DescriptionMethodNotAllowed, http.StatusMethodNotAllowed)
 		return
 	}
+	// if r.Method == "POST" {
+    //     city := r.FormValue("city")
+    //     fmt.Println(city) 
+    // }
 	idParam := r.PathValue("id")
-	cities := r.Form.Get("city")
+	cities := r.PostFormValue("city")
 	fmt.Println(cities)
 	artist, err := FetchDataRelationFromId(idParam, cities)
 	if err != nil {

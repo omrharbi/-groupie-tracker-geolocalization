@@ -21,8 +21,18 @@ type Artist struct {
 	FirstAlbum     string              `json:"firstAlbum"`
 	Date           []string            `json:"dates"`
 	Location       []string
+	Cities         []string `json:"cities"`
+	Lat            float64
+	Lon            float64
+	SelectedCity   string
 }
-
+type Cities struct {
+	Cities       []string
+	Lat          float64
+	Lon          float64
+	SelectedCity string
+	Location     Location
+}
 type GeoResponse struct {
 	Items []struct {
 		Position struct {

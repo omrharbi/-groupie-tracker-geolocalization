@@ -98,7 +98,6 @@ func getCities() []string {
 	for _, item := range location.Location {
 		city := strings.NewReplacer("-", " ", "_", " ").Replace(item)
 		cities = append(cities, city)
-
 	}
 	return cities
 }

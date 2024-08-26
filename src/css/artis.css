@@ -485,9 +485,7 @@ iframe {
   border-radius: 20px;
   height: 56vh;
 }
-  .maps {
-    display: flex;
-}
+
 
 input.btn {
   background: aliceblue;

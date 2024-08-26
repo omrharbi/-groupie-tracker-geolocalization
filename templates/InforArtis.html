@@ -6,6 +6,8 @@
     <link rel="stylesheet" href="/styles/css/artis.css">
     <title>Artist Info | {{ .Name }}</title>
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <script src="https://cesium.com/downloads/cesiumjs/releases/1.101/Build/Cesium/Cesium.js"></script>
+    <link href="https://cesium.com/downloads/cesiumjs/releases/1.101/Build/Cesium/Widgets/widgets.css" rel="stylesheet">
 
 </head>
 
@@ -115,12 +117,24 @@
                 </header>
                 <h2 class="titles">Locations</h2>
                 <div class="maps">
-                    <iframe
+
+                   <div class="city">
+                        <select name="city" >
+                            <option value=""></option>
+                            {{range .Location}}
+                            <option value="{{.}}" >{{.}}</option>
+                            {{end}}
+                        </select>
+                    
+                    <!-- Hidden iframe -->
+                   </div>
+                    <div id="cesiumContainer"></div>
+                    <!-- <iframe
                     src="/templates/maps.html"
                     name="targetframe"
                     allowTransparency="true"
                     scrolling="no"
-                    frameborder="0"></iframe>
+                    frameborder="0"></iframe> -->
                 </div>
             </article>
             <article id="relation" class="contact-artists">
@@ -155,7 +169,22 @@
 
    
     <script src="/styles/js/navigation.js"></script>
-    
+    <script src="https://cesium.com/downloads/cesiumjs/releases/1.82/Build/Cesium/Cesium.js"></script>
+    <script> 
+         Cesium.Ion.defaultAccessToken = "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJqdGkiOiJkODRkOWJmMy1lZWIwLTRjNTktOTFlNC1mMzMxYWJjYTAxYzAiLCJpZCI6MjM2NzE4LCJpYXQiOjE3MjQ0OTU5Mjd9.xUdL_xpp9kiw0sS_VQ5IOFdlFfN6ORhU4PPsyGVP_kc"; // Initialize the Cesium viewer
+        const viewer = new Cesium.Viewer('cesiumContainer');
+        // Check if there are coordinates to display
+        const lat = parseFloat("");
+        const lon = parseFloat("");
+        // console.log(lat, lon)
+        if (lat && lon) {
+            viewer.camera.flyTo({
+                destination: Cesium.Cartesian3.fromDegrees(lon, lat, 1500)
+            });
+        }
+
+        
+    </script>
 
 </body>
 
