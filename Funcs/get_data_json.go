@@ -88,7 +88,6 @@ func HandlerShowRelation(w http.ResponseWriter, r *http.Request) {
 
 func Handler(w http.ResponseWriter, r *http.Request) {
 	city := r.URL.Query().Get("city")
-	fmt.Println(city)
 	var lat, lon float64
 	var err error
 	if city != "" {
